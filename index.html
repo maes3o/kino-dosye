@@ -9,13 +9,14 @@
 <style>
   :root{color-scheme:light}
   *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
   html,body{margin:0;padding:0}
   body{
     background:#e8dcbb;
     color:#2a2118;
     font-family:"PT Sans","Golos Text",system-ui,sans-serif;
-    font-size:17px;
-    line-height:1.5;
+    font-size:15.5px;
+    line-height:1.48;
     -webkit-font-smoothing:antialiased;
   }
   img{max-width:100%}
@@ -36,25 +37,25 @@
     padding:22px 26px 24px;
   }
   h1{
-    font-family:"Oswald",sans-serif;font-weight:700;font-size:clamp(30px,4.4vw,44px);
+    font-family:"Oswald",sans-serif;font-weight:700;font-size:clamp(24px,3.6vw,34px);
     letter-spacing:.01em;text-transform:uppercase;margin:4px 0 6px;text-wrap:balance;color:#2a2118;
   }
-  .subtitle{color:#6d5f47;font-size:16.5px;max-width:64ch}
+  .subtitle{color:#6d5f47;font-size:14.5px;max-width:64ch}
   .setup-note{
     margin-top:14px;padding:12px 14px;border-radius:8px;
-    background:#f1ded9;border:1px solid #8c2f27;color:#5a1e18;font-size:14px;
+    background:#f1ded9;border:1px solid #8c2f27;color:#5a1e18;font-size:13px;
   }
   .setup-note code{background:#fff8;padding:1px 5px;border-radius:4px}
 
   .stats{display:flex;gap:22px;margin-top:18px;padding-top:14px;border-top:1px dashed #c9b988;font-family:"PT Mono",monospace;flex-wrap:wrap}
   .stat{display:flex;flex-direction:column;gap:2px}
-  .stat b{font-size:23px;color:#2a2118;font-weight:700;font-variant-numeric:tabular-nums}
-  .stat span{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:#a4936d}
+  .stat b{font-size:19px;color:#2a2118;font-weight:700;font-variant-numeric:tabular-nums}
+  .stat span{font-size:10.5px;letter-spacing:.07em;text-transform:uppercase;color:#a4936d}
 
   .toolbar{margin-top:22px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
   .filters{display:flex;gap:8px;flex-wrap:wrap}
   .chip{
-    font-family:"PT Mono",monospace;font-size:13px;letter-spacing:.03em;padding:7px 13px;
+    font-family:"PT Mono",monospace;font-size:12.5px;letter-spacing:.03em;padding:7px 13px;
     border-radius:999px;border:1px solid #c9b988;background:transparent;color:#6d5f47;cursor:pointer;
     transition:background .15s,color .15s,border-color .15s;
   }
@@ -64,7 +65,7 @@
     outline:2px solid #1b6ea8;outline-offset:2px
   }
   .add-btn{
-    font-family:"PT Mono",monospace;font-size:13px;letter-spacing:.04em;padding:9px 16px;border-radius:8px;
+    font-family:"PT Mono",monospace;font-size:12.5px;letter-spacing:.04em;padding:9px 16px;border-radius:8px;
     border:1px solid #24405f;background:#24405f;color:#f6efd9;cursor:pointer;white-space:nowrap;
   }
   .add-btn:hover{filter:brightness(1.08)}
@@ -289,6 +290,12 @@
     <div class="stats" id="stats"></div>
   </header>
 
+  <div class="reco-box" id="recoBox">
+    <div class="reco-head">Рекомендації від Клода</div>
+    <div class="reco-sub">Схоже на «Джентльменів» і на ваш смак — детективи, чорний гумор, харизматичні негідники. Тисни «Додати» — і воно саме знайдеться в пошуку.</div>
+    <div class="reco-list" id="recoList"></div>
+  </div>
+
   <div class="toolbar">
     <div class="filters" id="filters" role="group" aria-label="Фільтр за статусом">
       <button class="chip" data-filter="all" aria-pressed="true">Усі</button>
@@ -358,12 +365,6 @@
       <button class="add-btn" type="submit">Додати</button>
     </div>
   </form>
-
-  <div class="reco-box" id="recoBox">
-    <div class="reco-head">Рекомендації від Клода</div>
-    <div class="reco-sub">Схоже на «Джентльменів» і на ваш смак — детективи, чорний гумор, харизматичні негідники. Тисни «Додати» — і воно саме знайдеться в пошуку.</div>
-    <div class="reco-list" id="recoList"></div>
-  </div>
 
   <div class="grid" id="grid"><div class="empty spinner">Завантаження справи…</div></div>
 
@@ -499,8 +500,6 @@
     const series = isSeries(d);
     const fully = isFullySeen(d);
     const any = isAnySeen(d);
-    const likePressed = d.liked === true;
-    const dislikePressed = d.liked === false;
     const verdictDisabled = !any;
 
     let stamp = "";
@@ -556,10 +555,6 @@
         </div>
         <div class="rule"></div>
         ${watchControl}
-        <div class="verdict">
-          <button class="verdict-btn like" data-action="like" aria-pressed="${likePressed}" ${verdictDisabled ? 'disabled' : ''}>${ICON_CHECK} Сподобалось</button>
-          <button class="verdict-btn dislike" data-action="dislike" aria-pressed="${dislikePressed}" ${verdictDisabled ? 'disabled' : ''}>${ICON_X} Не зайшло</button>
-        </div>
         ${starsHtml}
         ${verdictDisabled ? '<div class="verdict-hint">Спершу подивіться — потім оцініть.</div>' : ''}
       </article>`;
@@ -577,7 +572,7 @@
           if(set.has(s)) set.delete(s); else set.add(s);
           const seasonsSeen = Array.from(set).sort((a,b) => a-b);
           const patch = { seasonsSeen };
-          if(seasonsSeen.length === 0) patch.liked = null;
+          if(seasonsSeen.length === 0){ patch.liked = null; patch.rating = 0; }
           patchDoc(d.id, patch);
         });
       });
@@ -588,23 +583,15 @@
         const total = Math.max(1, (d.seasons||1) - 1);
         const seasonsSeen = seasonsSeenOf(d).filter(s => s <= total);
         const patch = { seasons: total, seasonsSeen };
-        if(seasonsSeen.length === 0) patch.liked = null;
+        if(seasonsSeen.length === 0){ patch.liked = null; patch.rating = 0; }
         patchDoc(d.id, patch);
       });
     }else{
       card.querySelector('[data-action="seen"]').addEventListener("click", () => {
         const next = !d.seen;
-        patchDoc(d.id, next ? { seen: true } : { seen: false, liked: null });
+        patchDoc(d.id, next ? { seen: true } : { seen: false, liked: null, rating: 0 });
       });
     }
-    card.querySelector('[data-action="like"]').addEventListener("click", () => {
-      if(!isAnySeen(d)) return;
-      patchDoc(d.id, { liked: d.liked === true ? null : true });
-    });
-    card.querySelector('[data-action="dislike"]').addEventListener("click", () => {
-      if(!isAnySeen(d)) return;
-      patchDoc(d.id, { liked: d.liked === false ? null : false });
-    });
     card.querySelector('[data-action="remove"]').addEventListener("click", () => {
       docs = docs.filter(x => x.id !== d.id);
       render();
@@ -614,7 +601,8 @@
       btn.addEventListener("click", () => {
         if(!isAnySeen(d)) return;
         const v = parseInt(btn.dataset.value, 10);
-        patchDoc(d.id, { rating: d.rating === v ? 0 : v });
+        const rating = d.rating === v ? 0 : v;
+        patchDoc(d.id, { rating, liked: rating >= 4 ? true : (rating > 0 ? false : null) });
       });
     });
   }
