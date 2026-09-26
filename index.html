@@ -1,0 +1,737 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Досьє кіновечора</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=PT+Sans:wght@400;700&family=PT+Mono:wght@400;700&display=swap">
+<style>
+  :root{color-scheme:light}
+  *{box-sizing:border-box}
+  html,body{margin:0;padding:0}
+  body{
+    background:#e8dcbb;
+    color:#2a2118;
+    font-family:"PT Sans","Golos Text",system-ui,sans-serif;
+    line-height:1.45;
+    -webkit-font-smoothing:antialiased;
+  }
+  img{max-width:100%}
+  [hidden]{display:none!important}
+  ::selection{background:#d7e0e8}
+
+  .wrap{max-width:1180px;margin:0 auto;padding:28px 20px 64px}
+
+  .tab{
+    display:inline-flex;align-items:baseline;gap:10px;
+    background:#f6efd9;border:1px solid #d8c99a;border-bottom:none;
+    border-radius:10px 10px 0 0;padding:8px 20px;
+    font-family:"PT Mono",monospace;font-size:12px;letter-spacing:.06em;color:#6d5f47;
+  }
+  header.folder{
+    background:#f6efd9;border:1px solid #d8c99a;border-radius:0 14px 14px 14px;
+    box-shadow:0 1px 0 rgba(42,33,24,.05),0 6px 16px -10px rgba(42,33,24,.35);
+    padding:22px 26px 24px;
+  }
+  h1{
+    font-family:"Oswald",sans-serif;font-weight:700;font-size:clamp(28px,4vw,40px);
+    letter-spacing:.01em;text-transform:uppercase;margin:4px 0 6px;text-wrap:balance;color:#2a2118;
+  }
+  .subtitle{color:#6d5f47;font-size:15px;max-width:64ch}
+  .setup-note{
+    margin-top:14px;padding:12px 14px;border-radius:8px;
+    background:#f1ded9;border:1px solid #8c2f27;color:#5a1e18;font-size:13px;
+  }
+  .setup-note code{background:#fff8;padding:1px 5px;border-radius:4px}
+
+  .stats{display:flex;gap:22px;margin-top:18px;padding-top:14px;border-top:1px dashed #c9b988;font-family:"PT Mono",monospace;flex-wrap:wrap}
+  .stat{display:flex;flex-direction:column;gap:2px}
+  .stat b{font-size:20px;color:#2a2118;font-weight:700;font-variant-numeric:tabular-nums}
+  .stat span{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:#a4936d}
+
+  .toolbar{margin-top:22px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
+  .filters{display:flex;gap:8px;flex-wrap:wrap}
+  .chip{
+    font-family:"PT Mono",monospace;font-size:12px;letter-spacing:.03em;padding:7px 13px;
+    border-radius:999px;border:1px solid #c9b988;background:transparent;color:#6d5f47;cursor:pointer;
+    transition:background .15s,color .15s,border-color .15s;
+  }
+  .chip:hover{border-color:#24405f;color:#2a2118}
+  .chip[aria-pressed="true"]{background:#24405f;border-color:#24405f;color:#f6efd9}
+  .chip:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{
+    outline:2px solid #1b6ea8;outline-offset:2px
+  }
+  .add-btn{
+    font-family:"PT Mono",monospace;font-size:12px;letter-spacing:.04em;padding:9px 16px;border-radius:8px;
+    border:1px solid #24405f;background:#24405f;color:#f6efd9;cursor:pointer;white-space:nowrap;
+  }
+  .add-btn:hover{filter:brightness(1.08)}
+  .add-btn.ghost{background:transparent;color:#24405f}
+  .add-btn:disabled{opacity:.5;cursor:not-allowed}
+
+  .search-box{
+    display:none;margin-top:14px;padding:16px;background:#f6efd9;border:1px solid #d8c99a;border-radius:10px;
+    flex-direction:column;gap:12px;
+  }
+  .search-box.open{display:flex}
+  .search-row{display:flex;gap:10px;flex-wrap:wrap}
+  .search-row input[type="text"]{
+    flex:1;min-width:220px;font-family:"PT Sans",sans-serif;font-size:14px;padding:9px 12px;
+    border-radius:6px;border:1px solid #c9b988;background:#e8dcbb;color:#2a2118;
+  }
+  .search-hint{font-size:12px;color:#a4936d;font-family:"PT Mono",monospace}
+  .search-results{display:flex;flex-direction:column;gap:8px;max-height:420px;overflow-y:auto}
+  .result-card{
+    display:flex;gap:12px;padding:10px;border-radius:8px;border:1px solid #d8c99a;background:#e8dcbb;
+    cursor:pointer;text-align:left;align-items:flex-start;
+  }
+  .result-card:hover{border-color:#24405f}
+  .result-poster{width:48px;height:68px;object-fit:cover;border-radius:5px;flex:none;background:#d8c99a}
+  .result-poster-ph{
+    width:48px;height:68px;border-radius:5px;flex:none;background:#d8c99a;display:flex;align-items:center;
+    justify-content:center;font-family:"PT Mono",monospace;font-size:9px;color:#a4936d;text-align:center;padding:2px;
+  }
+  .result-body{display:flex;flex-direction:column;gap:3px;min-width:0}
+  .result-title{font-weight:700;font-size:14px}
+  .result-meta{font-family:"PT Mono",monospace;font-size:11px;color:#6d5f47}
+  .result-overview{font-size:12px;color:#6d5f47;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+
+  .manual-link{background:none;border:none;color:#24405f;text-decoration:underline;cursor:pointer;font-size:12.5px;align-self:flex-start}
+
+  .confirm-box{display:none;flex-direction:column;gap:10px;padding:14px;border:1px dashed #c9b988;border-radius:8px;background:#e8dcbb}
+  .confirm-box.open{display:flex}
+  .confirm-top{display:flex;gap:12px}
+  .confirm-poster{width:70px;height:100px;object-fit:cover;border-radius:6px;flex:none;background:#d8c99a}
+  .confirm-fields{display:flex;flex-direction:column;gap:8px;flex:1;min-width:0}
+  .field{display:flex;flex-direction:column;gap:5px}
+  .field label{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#a4936d;font-family:"PT Mono",monospace}
+  .field input[type="text"],.field input[type="number"],.field select,.field textarea{
+    font-family:"PT Sans",sans-serif;font-size:14px;padding:8px 10px;border-radius:6px;
+    border:1px solid #c9b988;background:#f6efd9;color:#2a2118;
+  }
+  .field textarea{resize:vertical;min-height:44px;font-family:inherit}
+  .confirm-row{display:flex;gap:10px;flex-wrap:wrap}
+  .confirm-row .field{flex:1;min-width:140px}
+  .confirm-actions{display:flex;gap:8px;justify-content:flex-end}
+
+  .manual-form{display:none;flex-direction:column;gap:10px;padding:14px;border:1px dashed #c9b988;border-radius:8px;background:#e8dcbb}
+  .manual-form.open{display:flex}
+
+  .grid{margin-top:22px;display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+  .card{
+    position:relative;background:#f6efd9;border:1px solid #d8c99a;border-radius:10px;
+    box-shadow:0 1px 0 rgba(42,33,24,.05),0 6px 16px -10px rgba(42,33,24,.35);
+    padding:16px 16px 14px;overflow:hidden;display:flex;flex-direction:column;gap:10px;
+  }
+  .card-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+  .case-no{font-family:"PT Mono",monospace;font-size:11px;color:#a4936d;letter-spacing:.05em}
+  .icon-btn{background:none;border:none;color:#a4936d;cursor:pointer;font-size:13px;line-height:1;padding:2px 5px;border-radius:4px}
+  .icon-btn:hover{color:#8c2f27;background:#f1ded9}
+  .card-main{display:flex;gap:12px}
+  .poster{flex:none;width:64px;height:90px;border-radius:6px;object-fit:cover;border:1px solid #c9b988;background:#e8dcbb}
+  .poster-placeholder{
+    flex:none;width:64px;height:90px;border-radius:6px;border:1px dashed #c9b988;background:#e8dcbb;
+    color:#a4936d;display:flex;align-items:center;justify-content:center;font-family:"PT Mono",monospace;
+    font-size:10px;text-align:center;padding:4px;
+  }
+  .card-body{flex:1;display:flex;flex-direction:column;gap:6px;min-width:0}
+  .title{font-family:"PT Sans",sans-serif;font-weight:700;font-size:18px;color:#2a2118;text-wrap:balance}
+  .genre{
+    align-self:flex-start;font-family:"PT Mono",monospace;font-size:10.5px;letter-spacing:.06em;
+    text-transform:uppercase;color:#6d5f47;border:1px solid #c9b988;border-radius:999px;padding:3px 9px;
+  }
+  .desc{font-size:12.5px;color:#6d5f47;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .note{font-size:12.5px;color:#8c2f27;font-style:italic}
+  .rule{border-top:1px dashed #c9b988;margin:2px 0}
+  .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+  .seen-btn{
+    font-family:"PT Mono",monospace;font-size:12px;letter-spacing:.03em;padding:7px 12px;border-radius:7px;
+    border:1px solid #c9b988;background:transparent;color:#6d5f47;cursor:pointer;display:inline-flex;
+    align-items:center;gap:6px;
+  }
+  .seen-btn[aria-pressed="true"]{background:#dde9de;border-color:#35603f;color:#35603f}
+  .season-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .season-label{font-family:"PT Mono",monospace;font-size:11px;color:#a4936d;letter-spacing:.04em;margin-right:2px}
+  .season-chip{
+    font-family:"PT Mono",monospace;font-size:11.5px;padding:5px 9px;border-radius:6px;
+    border:1px solid #c9b988;background:transparent;color:#6d5f47;cursor:pointer;
+  }
+  .season-chip[aria-pressed="true"]{background:#dde9de;border-color:#35603f;color:#35603f}
+  .season-adj{
+    font-family:"PT Mono",monospace;font-size:13px;width:26px;height:26px;line-height:1;border-radius:6px;
+    border:1px dashed #c9b988;background:transparent;color:#a4936d;cursor:pointer;
+  }
+  .season-adj:hover{border-color:#24405f;color:#24405f}
+  .stamp{
+    position:absolute;top:14px;right:-34px;transform:rotate(11deg);font-family:"Oswald",sans-serif;
+    font-weight:700;font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:#8c2f27;
+    border:2.5px solid #8c2f27;border-radius:6px;padding:3px 30px;opacity:.8;mix-blend-mode:multiply;pointer-events:none;
+  }
+  .stamp.stamp-partial{color:#24405f;border-color:#24405f}
+  .verdict{display:flex;gap:6px}
+  .verdict-btn{
+    flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;font-family:"PT Sans",sans-serif;
+    font-size:12.5px;padding:7px 8px;border-radius:7px;border:1px solid #c9b988;background:transparent;color:#6d5f47;cursor:pointer;
+  }
+  .verdict-btn svg{width:13px;height:13px;flex:none}
+  .verdict-btn.like[aria-pressed="true"]{background:#dde9de;border-color:#35603f;color:#35603f}
+  .verdict-btn.dislike[aria-pressed="true"]{background:#f1ded9;border-color:#8c2f27;color:#8c2f27}
+  .verdict-btn:disabled{opacity:.45;cursor:not-allowed}
+  .verdict-hint{font-size:11.5px;color:#a4936d;font-style:italic}
+  .empty{grid-column:1/-1;text-align:center;padding:50px 20px;color:#6d5f47;font-family:"PT Mono",monospace;font-size:13px}
+  footer.note-foot{margin-top:26px;color:#a4936d;font-size:12px;text-align:center}
+  .spinner{font-family:"PT Mono",monospace;font-size:12px;color:#6d5f47}
+
+  @media (prefers-color-scheme: dark){
+    body{background:#12161d;color:#e9e2ce}
+    .tab,header.folder{background:#1b212b;border-color:#2b3341;color:#a7a091}
+    h1{color:#e9e2ce}
+    .subtitle{color:#a7a091}
+    .stats{border-color:#333c48}
+    .stat b{color:#e9e2ce}
+    .stat span{color:#6b7280}
+    .chip{border-color:#333c48;color:#a7a091}
+    .chip:hover{border-color:#86aed6;color:#e9e2ce}
+    .chip[aria-pressed="true"]{background:#86aed6;border-color:#86aed6;color:#12161d}
+    .add-btn{border-color:#86aed6;background:#86aed6;color:#12161d}
+    .add-btn.ghost{background:transparent;color:#86aed6}
+    .search-box,.manual-form{background:#1b212b;border-color:#2b3341}
+    .search-row input[type="text"]{background:#12161d;border-color:#333c48;color:#e9e2ce}
+    .search-hint{color:#6b7280}
+    .result-card{background:#12161d;border-color:#2b3341}
+    .result-card:hover{border-color:#86aed6}
+    .result-poster,.result-poster-ph{background:#2b3341}
+    .result-poster-ph{color:#6b7280}
+    .result-meta,.result-overview{color:#a7a091}
+    .manual-link{color:#86aed6}
+    .confirm-box{background:#12161d;border-color:#333c48}
+    .confirm-poster{background:#2b3341}
+    .field label{color:#6b7280}
+    .field input,.field select,.field textarea{background:#1b212b;border-color:#333c48;color:#e9e2ce}
+    .card{background:#1b212b;border-color:#2b3341}
+    .case-no{color:#6b7280}
+    .icon-btn{color:#6b7280}
+    .icon-btn:hover{color:#e08d84;background:#3a2323}
+    .poster,.poster-placeholder{border-color:#333c48;background:#12161d}
+    .poster-placeholder{color:#6b7280}
+    .title{color:#e9e2ce}
+    .genre{color:#a7a091;border-color:#333c48}
+    .desc{color:#a7a091}
+    .note{color:#e08d84}
+    .rule{border-color:#333c48}
+    .seen-btn{border-color:#333c48;color:#a7a091}
+    .seen-btn[aria-pressed="true"]{background:#223227;border-color:#8fcb9a;color:#8fcb9a}
+    .season-label{color:#6b7280}
+    .season-chip{border-color:#333c48;color:#a7a091}
+    .season-chip[aria-pressed="true"]{background:#223227;border-color:#8fcb9a;color:#8fcb9a}
+    .season-adj{border-color:#333c48;color:#6b7280}
+    .season-adj:hover{border-color:#86aed6;color:#86aed6}
+    .stamp{color:#e08d84;border-color:#e08d84;mix-blend-mode:normal;opacity:.65}
+    .stamp.stamp-partial{color:#86aed6;border-color:#86aed6}
+    .verdict-btn{border-color:#333c48;color:#a7a091}
+    .verdict-btn.like[aria-pressed="true"]{background:#223227;border-color:#8fcb9a;color:#8fcb9a}
+    .verdict-btn.dislike[aria-pressed="true"]{background:#3a2323;border-color:#e08d84;color:#e08d84}
+    .verdict-hint,.empty,footer.note-foot,.spinner{color:#a7a091}
+    .setup-note{background:#3a2323;border-color:#e08d84;color:#f1ded9}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="tab">СПРАВА № КВ-2026 · ВІДКРИТО 06.09.2026</div>
+  <header class="folder">
+    <h1>Досьє кіновечора</h1>
+    <div class="subtitle">Спільний список Володимира й Марічки: детективи, гумор і все, що варто (чи не варто) переглянути ще раз. Додаєш назву — постер і опис підтягуються самі.</div>
+    <div id="setupNote" class="setup-note" hidden>
+      Список ще не підключено до спільного сховища. Відкрий <code>index.html</code> у текстовому редакторі,
+      постав свою адресу в <code>NPOINT_URL</code> на початку файла (інструкція — в чаті), і онови сторінку.
+      До того часу список зберігається лише в цьому браузері.
+    </div>
+    <div class="stats" id="stats"></div>
+  </header>
+
+  <div class="toolbar">
+    <div class="filters" id="filters" role="group" aria-label="Фільтр за статусом">
+      <button class="chip" data-filter="all" aria-pressed="true">Усі</button>
+      <button class="chip" data-filter="unseen" aria-pressed="false">Ще не дивились</button>
+      <button class="chip" data-filter="seen" aria-pressed="false">Переглянуті</button>
+      <button class="chip" data-filter="liked" aria-pressed="false">Сподобалось</button>
+    </div>
+    <button class="add-btn" id="toggleSearch" type="button">+ Додати фільм до справи</button>
+  </div>
+
+  <div class="search-box" id="searchBox">
+    <div class="search-row">
+      <input type="text" id="searchInput" placeholder="Введи назву — англійською або українською" autocomplete="off">
+      <button class="add-btn" id="searchBtn" type="button">Знайти</button>
+    </div>
+    <div class="search-hint" id="searchHint">Підказка: TMDB краще знаходить за оригінальною (англійською) назвою.</div>
+    <div class="search-results" id="searchResults"></div>
+    <button class="manual-link" id="manualLinkBtn" type="button">Не знайшлось? Додати вручну без фото</button>
+
+    <div class="confirm-box" id="confirmBox">
+      <div class="confirm-top">
+        <img class="confirm-poster" id="confirmPoster" alt="">
+        <div class="confirm-fields">
+          <div class="field"><label>Назва</label><input type="text" id="confirmTitle"></div>
+          <div class="confirm-row">
+            <div class="field">
+              <label>Жанр</label>
+              <select id="confirmGenre">
+                <option>Детектив</option><option>Комедія</option><option>Трилер</option>
+                <option>Драма</option><option>Пригоди</option><option>Інше</option>
+              </select>
+            </div>
+            <div class="field" id="confirmSeasonsField" hidden>
+              <label>Сезонів</label>
+              <input type="number" id="confirmSeasons" min="1" max="30" value="1">
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="field"><label>Опис</label><textarea id="confirmDesc" rows="3"></textarea></div>
+      <div class="confirm-actions">
+        <button class="add-btn ghost" id="confirmCancel" type="button">Скасувати</button>
+        <button class="add-btn" id="confirmSave" type="button">Додати до справи</button>
+      </div>
+    </div>
+  </div>
+
+  <form class="manual-form" id="manualForm">
+    <div class="field"><label>Назва</label><input type="text" id="mTitle" required></div>
+    <div class="confirm-row">
+      <div class="field">
+        <label>Жанр</label>
+        <select id="mGenre">
+          <option>Детектив</option><option>Комедія</option><option>Трилер</option>
+          <option>Драма</option><option>Пригоди</option><option>Інше</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Тип</label>
+        <select id="mType"><option value="movie">Фільм</option><option value="series">Серіал</option></select>
+      </div>
+      <div class="field" id="mSeasonsField" hidden><label>Сезонів</label><input type="number" id="mSeasons" min="1" max="30" value="1"></div>
+    </div>
+    <div class="field"><label>Опис (необов'язково)</label><textarea id="mDesc" rows="2"></textarea></div>
+    <div class="confirm-actions">
+      <button class="add-btn ghost" type="button" id="mCancel">Скасувати</button>
+      <button class="add-btn" type="submit">Додати</button>
+    </div>
+  </form>
+
+  <div class="grid" id="grid"><div class="empty spinner">Завантаження справи…</div></div>
+
+  <footer class="note-foot">Дані зберігаються спільно — правки одного одразу видно другому. Постери й описи підтягуються з TMDB автоматично.</footer>
+</div>
+
+<script>
+(function(){
+  // ====== НАЛАШТУВАННЯ ======
+  // Встав сюди URL свого бін-сховища з npoint.io (див. інструкцію в чаті)
+  const NPOINT_URL = "https://api.npoint.io/dae18da2e0bad3c922d5";
+  const TMDB_KEY = "7fdc39c0e3b34970e83e1f385e8fe2c8";
+  // ===========================
+
+  const ICON_CHECK = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3,8.5 6.5,12 13,4"/></svg>';
+  const ICON_X = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="4" x2="12" y2="12"/><line x1="12" y1="4" x2="4" y2="12"/></svg>';
+  const TMDB_IMG = "https://image.tmdb.org/t/p/w185";
+
+  function isSeries(d){ return d.type === "series"; }
+  function seasonsSeenOf(d){ return Array.isArray(d.seasonsSeen) ? d.seasonsSeen : []; }
+  function isAnySeen(d){ return isSeries(d) ? seasonsSeenOf(d).length > 0 : !!d.seen; }
+  function isFullySeen(d){
+    if(!isSeries(d)) return !!d.seen;
+    const total = d.seasons || 0;
+    return total > 0 && seasonsSeenOf(d).length >= total;
+  }
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+  }
+  function cssEscape(s){ return String(s).replace(/["\\]/g, "\\$&"); }
+
+  const SEED = [
+    { id:"umbrella-academy", title:"The Umbrella Academy", genre:"Пригоди", type:"series", seasons:4, seasonsSeen:[2,3,4], liked:false, note:"Офіційної укр. назви немає", order:1,
+      poster: TMDB_IMG + "/4Z8xUc44Fu0v3QddwFhHD9f6aTr.jpg",
+      desc: "Возз'єднавшись після смерті батька, брати й сестри з надприродними силами дізнаються про приголомшливі сімейні таємниці — і загрозу для людства." },
+    { id:"glass-onion", title:"Скляна цибуля: Ножі наголо", genre:"Детектив", seen:true, liked:true, note:"", order:2,
+      poster: TMDB_IMG + "/8gcvda9f6IBZGXarc99KbmlaNPt.jpg",
+      desc: "Всесвітньо відомий детектив Бенуа Блан вирушає до Греції, щоб розкрити шари таємниці, що оточує технологічного мільярдера та його різнопланову команду друзів." },
+    { id:"wake-up-dead-man", title:"Прокинься, покійнику — Ножі наголо", genre:"Детектив", seen:true, liked:true, note:"", order:3,
+      poster: TMDB_IMG + "/SGF052h6wEZq29ifyjoFlmHo8A.jpg",
+      desc: "Детектив Бенуа Бланк об'єднує зусилля зі старанним молодим священником, щоб розслідувати неймовірний злочин у церкві маленького містечка з темною історією." },
+    { id:"thursday-murder-club", title:"Клуб убивств по четвергах", genre:"Детектив", seen:true, liked:true, note:"", order:4,
+      poster: TMDB_IMG + "/9gCkQAb0PdykH1Z7U8FNufPONZh.jpg",
+      desc: "У цьому кумедному детективі на основі роману група слідчих старшого віку, яка полюбляє нерозкриті справи, отримує шанс розплутати реальне вбивство." },
+    { id:"the-residence", title:"Резиденція", genre:"Детектив", type:"series", seasons:1, seasonsSeen:[1], liked:true, note:"", order:5,
+      poster: TMDB_IMG + "/9Z5JmnZGipYvUCtRDMSvnmfHVYN.jpg",
+      desc: "Геніальна ексцентрична детективка має розплутати справу про вбивство в резиденції президента в Білому домі, підозрюваними в якій є весь персонал і гості офіційної вечері." },
+    { id:"murder-mystery", title:"Загадкове вбивство", genre:"Комедія", seen:true, liked:null, note:"", order:6,
+      poster: TMDB_IMG + "/mVygOa7mW2jnHROwVuZ3XQzuXF9.jpg",
+      desc: "Американська подружня пара відправляється у відпустку в Європу та стає свідком убивства старого мільйонера." },
+    { id:"enola-holmes-3", title:"Енола Холмс 3", genre:"Детектив", seen:true, liked:null, note:"", order:7,
+      poster: TMDB_IMG + "/xpUBwczeTWn2j4VslTU243tYDWY.jpg",
+      desc: "Нові пригоди вже чекають: детективка Енола Холмс їде на Мальту на своє весілля, але все йде не за планом, коли зникнення Шерлока втягує її в небезпечну справу." },
+    { id:"holmes-watson", title:"Холмс і Ватсон", genre:"Комедія", seen:true, liked:false, note:"Немає укр. дубляжу", order:8,
+      poster: TMDB_IMG + "/p1M7LmcfvbmsEFdmuRWjNiA1fud.jpg",
+      desc: "Історія про приватного детектива Шерлока Голмса і його напарника доктора Ватсона. Ексцентричний дует береться за заплутане розслідування, наживаючи ворогів з усього світу." },
+    { id:"gentlemen", title:"Джентльмени", genre:"Комедія", type:"series", seasons:2, seasonsSeen:[1], liked:null, note:"", order:9,
+      poster: TMDB_IMG + "/zwz0K0JDe7cCMR3sldOTgHmMRyy.jpg",
+      desc: "Успадкувавши сімейний маєток, аристократ Едді виявляє, що тут розташована величезна імперія марихуани, а її власники нікуди не збираються." },
+    { id:"harlan-coben", title:"Гарлан Кобен: Я тебе відшукаю", genre:"Трилер", type:"series", seasons:1, seasonsSeen:[], liked:null, note:"", order:10,
+      poster: TMDB_IMG + "/lXJDAPb7s8mKzsZbAcT0dlSQbdY.jpg",
+      desc: "Несправедливо засуджений за вбивство свого сина чоловік дізнається, що хлопчик міг вижити, і вирушає на порятунок." },
+    { id:"mysterious-woman", title:"Загадкова жінка", genre:"Драма", seen:false, liked:null, note:"", order:11,
+      poster: TMDB_IMG + "/htPAfHuogi5EGkHo2MeM54QvXSH.jpg",
+      desc: "Жінка, яка втратила пам'ять, дізнається, що володіє судноплавною імперією та має сім'ю. Вона повертається до свого, на перший погляд, ідеального минулого, щоб розкрити правду про те, чому вона його покинула." },
+    { id:"confidential-informant", title:"Таємний інформатор", genre:"Трилер", seen:true, liked:null, note:"", order:12,
+      poster: TMDB_IMG + "/uQcT8JaR0UrHX3TKVtNJcveyqfw.jpg",
+      desc: "Хворий на рак детектив поліції домовляється з інформатором, щоб його вбили під час виконання службових обов'язків. Усе це для того, аби його родина могла отримати від департаменту значну компенсацію у разі його смерті." },
+    { id:"seven-women-murder", title:"7 жінок і вбивство", genre:"Детектив", seen:true, liked:null, note:"", order:13,
+      poster: TMDB_IMG + "/2GgwZTgrtQBroiOSPyPV2IQSJLc.jpg",
+      desc: "Голову родини вбивають у замкненому маєтку. Таємницю його смерті намагаються розгадати сім жінок, але кожна з них має власні мотиви." },
+    { id:"pentaverate", title:"Пентаверат", genre:"Комедія", seen:false, liked:null, note:"Немає укр. дубляжу", order:14,
+      poster: TMDB_IMG + "/5stgfUQ10ja6LeJKEZOldK7y4vT.jpg",
+      desc: "Таємне товариство протягом століть впливало на світові події, але тепер зіткнулося з внутрішньою загрозою. Чи зможе канадський репортер урятувати його та весь світ?" },
+    { id:"v-is-for-murder", title:"«В» як у слові «вбивство»", genre:"Детектив", seen:false, liked:null, note:"Немає укр. дубляжу", order:15,
+      poster: TMDB_IMG + "/97tkxQGokSUlLezKX0dupJrNpmi.jpg",
+      desc: "Мати-домогосподарка, яка обожнює детективи, розслідує вбивство жінки й дізнається найпотаємніші секрети жителів маленького містечка." }
+  ];
+
+  let docs = [];
+  let activeFilter = "all";
+  let saveTimer = null;
+  const grid = document.getElementById("grid");
+  const statsEl = document.getElementById("stats");
+  const setupNote = document.getElementById("setupNote");
+  if(!NPOINT_URL) setupNote.hidden = false;
+
+  function fmtStats(){
+    const total = docs.length;
+    const started = docs.filter(isAnySeen).length;
+    const liked = docs.filter(d => d.liked === true).length;
+    statsEl.innerHTML = `
+      <div class="stat"><b>${total}</b><span>Усього у справі</span></div>
+      <div class="stat"><b>${started}</b><span>Розпочато / переглянуто</span></div>
+      <div class="stat"><b>${total - started}</b><span>Ще чекають</span></div>
+      <div class="stat"><b>${liked}</b><span>Зайшло обом</span></div>
+    `;
+  }
+
+  function applyFilter(list){
+    switch(activeFilter){
+      case "unseen": return list.filter(d => !isAnySeen(d));
+      case "seen": return list.filter(isAnySeen);
+      case "liked": return list.filter(d => d.liked === true);
+      default: return list;
+    }
+  }
+
+  function render(){
+    fmtStats();
+    const list = applyFilter(docs).slice().sort((a,b) => (a.order||0) - (b.order||0));
+    if(list.length === 0){
+      grid.innerHTML = '<div class="empty">У цій категорії поки порожньо.</div>';
+      return;
+    }
+    grid.innerHTML = list.map((d,i) => cardHtml(d,i)).join("");
+    list.forEach(d => wireCard(d));
+  }
+
+  function cardHtml(d, i){
+    const num = String(i + 1).padStart(3, "0");
+    const series = isSeries(d);
+    const fully = isFullySeen(d);
+    const any = isAnySeen(d);
+    const likePressed = d.liked === true;
+    const dislikePressed = d.liked === false;
+    const verdictDisabled = !any;
+
+    let stamp = "";
+    if(fully) stamp = '<div class="stamp">Переглянуто</div>';
+    else if(series && any) stamp = '<div class="stamp stamp-partial">У процесі</div>';
+
+    let watchControl;
+    if(series){
+      const total = d.seasons || 1;
+      const seenSet = seasonsSeenOf(d);
+      let chips = "";
+      for(let s = 1; s <= total; s++){
+        chips += `<button class="season-chip" data-action="season" data-season="${s}" aria-pressed="${seenSet.includes(s)}">С${s}</button>`;
+      }
+      watchControl = `
+        <div class="season-row">
+          <span class="season-label">Сезони:</span>${chips}
+          <button class="season-adj" data-action="season-add" title="Додати сезон">+</button>
+          ${total > 1 ? `<button class="season-adj" data-action="season-remove" title="Прибрати останній сезон">−</button>` : ''}
+        </div>`;
+    }else{
+      watchControl = `<div class="row"><button class="seen-btn" data-action="seen" aria-pressed="${fully}">${fully ? ICON_CHECK : ''} ${fully ? 'Переглянуто' : 'Позначити переглянутим'}</button></div>`;
+    }
+
+    const posterBlock = d.poster
+      ? `<img class="poster" src="${d.poster}" alt="" loading="lazy">`
+      : `<div class="poster-placeholder">без фото</div>`;
+    const descBlock = d.desc ? `<div class="desc">${escapeHtml(d.desc)}</div>` : "";
+
+    return `
+      <article class="card" data-id="${d.id}">
+        ${stamp}
+        <div class="card-top">
+          <span class="case-no">№ КВ-${num}</span>
+          <button class="icon-btn" data-action="remove" title="Прибрати зі справи">✕</button>
+        </div>
+        <div class="card-main">
+          ${posterBlock}
+          <div class="card-body">
+            <div class="title">${escapeHtml(d.title)}</div>
+            <span class="genre">${escapeHtml(d.genre || "Інше")}${series ? ' · серіал' : ''}</span>
+            ${d.note ? `<div class="note">${escapeHtml(d.note)}</div>` : ''}
+            ${descBlock}
+          </div>
+        </div>
+        <div class="rule"></div>
+        ${watchControl}
+        <div class="verdict">
+          <button class="verdict-btn like" data-action="like" aria-pressed="${likePressed}" ${verdictDisabled ? 'disabled' : ''}>${ICON_CHECK} Сподобалось</button>
+          <button class="verdict-btn dislike" data-action="dislike" aria-pressed="${dislikePressed}" ${verdictDisabled ? 'disabled' : ''}>${ICON_X} Не зайшло</button>
+        </div>
+        ${verdictDisabled ? '<div class="verdict-hint">Спершу подивіться — потім оцініть.</div>' : ''}
+      </article>`;
+  }
+
+  function wireCard(d){
+    const card = grid.querySelector(`.card[data-id="${cssEscape(d.id)}"]`);
+    if(!card) return;
+    const series = isSeries(d);
+    if(series){
+      card.querySelectorAll('[data-action="season"]').forEach(btn => {
+        btn.addEventListener("click", () => {
+          const s = parseInt(btn.dataset.season, 10);
+          const set = new Set(seasonsSeenOf(d));
+          if(set.has(s)) set.delete(s); else set.add(s);
+          const seasonsSeen = Array.from(set).sort((a,b) => a-b);
+          const patch = { seasonsSeen };
+          if(seasonsSeen.length === 0) patch.liked = null;
+          patchDoc(d.id, patch);
+        });
+      });
+      const addBtn = card.querySelector('[data-action="season-add"]');
+      if(addBtn) addBtn.addEventListener("click", () => patchDoc(d.id, { seasons: (d.seasons||1) + 1 }));
+      const rmBtn = card.querySelector('[data-action="season-remove"]');
+      if(rmBtn) rmBtn.addEventListener("click", () => {
+        const total = Math.max(1, (d.seasons||1) - 1);
+        const seasonsSeen = seasonsSeenOf(d).filter(s => s <= total);
+        const patch = { seasons: total, seasonsSeen };
+        if(seasonsSeen.length === 0) patch.liked = null;
+        patchDoc(d.id, patch);
+      });
+    }else{
+      card.querySelector('[data-action="seen"]').addEventListener("click", () => {
+        const next = !d.seen;
+        patchDoc(d.id, next ? { seen: true } : { seen: false, liked: null });
+      });
+    }
+    card.querySelector('[data-action="like"]').addEventListener("click", () => {
+      if(!isAnySeen(d)) return;
+      patchDoc(d.id, { liked: d.liked === true ? null : true });
+    });
+    card.querySelector('[data-action="dislike"]').addEventListener("click", () => {
+      if(!isAnySeen(d)) return;
+      patchDoc(d.id, { liked: d.liked === false ? null : false });
+    });
+    card.querySelector('[data-action="remove"]').addEventListener("click", () => {
+      docs = docs.filter(x => x.id !== d.id);
+      render();
+      scheduleSave();
+    });
+  }
+
+  function patchDoc(id, patch){
+    const d = docs.find(x => x.id === id);
+    if(d) Object.assign(d, patch);
+    render();
+    scheduleSave();
+  }
+
+  function scheduleSave(){
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(saveRemote, 400);
+  }
+
+  async function saveRemote(){
+    if(!NPOINT_URL) { try{ localStorage.setItem("kino-dosye-local", JSON.stringify(docs)); }catch(e){} return; }
+    try{
+      await fetch(NPOINT_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ movies: docs })
+      });
+    }catch(e){ console.warn("save failed", e); }
+  }
+
+  async function loadRemote(){
+    if(!NPOINT_URL){
+      let local = null;
+      try{ local = JSON.parse(localStorage.getItem("kino-dosye-local") || "null"); }catch(e){}
+      docs = local && local.length ? local : SEED.map(s => Object.assign({}, s));
+      render();
+      return;
+    }
+    docs = SEED.map(s => Object.assign({}, s));
+    render();
+    try{
+      const res = await fetch(NPOINT_URL, { cache: "no-store" });
+      if(res.ok){
+        const data = await res.json();
+        if(data && Array.isArray(data.movies) && data.movies.length){
+          docs = data.movies;
+          render();
+        }else{
+          await saveRemote(); // first run: seed the empty bin
+        }
+      }
+    }catch(e){ console.warn("load failed", e); }
+  }
+
+  // ---- filters ----
+  document.getElementById("filters").addEventListener("click", (e) => {
+    const btn = e.target.closest(".chip");
+    if(!btn) return;
+    activeFilter = btn.dataset.filter;
+    document.querySelectorAll(".chip").forEach(c => c.setAttribute("aria-pressed", c === btn ? "true" : "false"));
+    render();
+  });
+
+  // ---- add flow: search TMDB ----
+  const toggleSearch = document.getElementById("toggleSearch");
+  const searchBox = document.getElementById("searchBox");
+  const searchInput = document.getElementById("searchInput");
+  const searchBtn = document.getElementById("searchBtn");
+  const searchResults = document.getElementById("searchResults");
+  const searchHint = document.getElementById("searchHint");
+  const confirmBox = document.getElementById("confirmBox");
+  const manualForm = document.getElementById("manualForm");
+  const manualLinkBtn = document.getElementById("manualLinkBtn");
+
+  toggleSearch.addEventListener("click", () => {
+    searchBox.classList.toggle("open");
+    manualForm.classList.remove("open");
+    if(searchBox.classList.contains("open")) searchInput.focus();
+  });
+
+  async function runSearch(){
+    const q = searchInput.value.trim();
+    if(!q) return;
+    searchResults.innerHTML = '<div class="spinner">Шукаю…</div>';
+    confirmBox.classList.remove("open");
+    try{
+      const url = `https://api.themoviedb.org/3/search/multi?api_key=${TMDB_KEY}&language=uk-UA&query=${encodeURIComponent(q)}`;
+      const res = await fetch(url);
+      const data = await res.json();
+      const results = (data.results || []).filter(r => r.media_type === "movie" || r.media_type === "tv").slice(0, 6);
+      if(results.length === 0){
+        searchResults.innerHTML = '<div class="search-hint">Нічого не знайдено. Спробуй іншу назву або додай вручну.</div>';
+        return;
+      }
+      searchResults.innerHTML = results.map((r,i) => resultCardHtml(r,i)).join("");
+      results.forEach((r,i) => {
+        searchResults.querySelector(`[data-idx="${i}"]`).addEventListener("click", () => openConfirm(r));
+      });
+    }catch(e){
+      searchResults.innerHTML = '<div class="search-hint">Не вдалося звʼязатися з TMDB. Перевір інтернет і спробуй ще раз.</div>';
+    }
+  }
+  searchBtn.addEventListener("click", runSearch);
+  searchInput.addEventListener("keydown", (e) => { if(e.key === "Enter"){ e.preventDefault(); runSearch(); } });
+
+  function resultCardHtml(r, i){
+    const title = r.title || r.name || "";
+    const year = (r.release_date || r.first_air_date || "").slice(0,4);
+    const poster = r.poster_path ? `<img class="result-poster" src="${TMDB_IMG}${r.poster_path}" alt="">` : `<div class="result-poster-ph">без фото</div>`;
+    return `
+      <button type="button" class="result-card" data-idx="${i}">
+        ${poster}
+        <div class="result-body">
+          <div class="result-title">${escapeHtml(title)}${year ? ` (${year})` : ''}</div>
+          <div class="result-meta">${r.media_type === "tv" ? "серіал" : "фільм"}</div>
+          ${r.overview ? `<div class="result-overview">${escapeHtml(r.overview)}</div>` : ''}
+        </div>
+      </button>`;
+  }
+
+  const confirmPoster = document.getElementById("confirmPoster");
+  const confirmTitle = document.getElementById("confirmTitle");
+  const confirmGenre = document.getElementById("confirmGenre");
+  const confirmDesc = document.getElementById("confirmDesc");
+  const confirmSeasonsField = document.getElementById("confirmSeasonsField");
+  const confirmSeasons = document.getElementById("confirmSeasons");
+  let pendingResult = null;
+
+  function openConfirm(r){
+    pendingResult = r;
+    confirmPoster.src = r.poster_path ? `${TMDB_IMG}${r.poster_path}` : "";
+    confirmTitle.value = r.title || r.name || "";
+    confirmDesc.value = r.overview || "";
+    const isTv = r.media_type === "tv";
+    confirmSeasonsField.hidden = !isTv;
+    if(isTv) confirmSeasons.value = 1;
+    confirmBox.classList.add("open");
+  }
+  document.getElementById("confirmCancel").addEventListener("click", () => {
+    confirmBox.classList.remove("open");
+    pendingResult = null;
+  });
+  document.getElementById("confirmSave").addEventListener("click", () => {
+    if(!pendingResult) return;
+    const isTv = pendingResult.media_type === "tv";
+    const id = "m-" + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+    const base = {
+      title: confirmTitle.value.trim() || "Без назви",
+      genre: confirmGenre.value,
+      desc: confirmDesc.value.trim(),
+      poster: pendingResult.poster_path ? `${TMDB_IMG}${pendingResult.poster_path}` : "",
+      liked: null, note: "", order: Date.now()
+    };
+    const data = isTv
+      ? Object.assign(base, { type: "series", seasons: Math.max(1, parseInt(confirmSeasons.value,10) || 1), seasonsSeen: [] })
+      : Object.assign(base, { seen: false });
+    docs.push(Object.assign({ id }, data));
+    render(); scheduleSave();
+    confirmBox.classList.remove("open");
+    searchBox.classList.remove("open");
+    searchInput.value = ""; searchResults.innerHTML = "";
+    pendingResult = null;
+  });
+
+  // ---- manual add (no TMDB match) ----
+  manualLinkBtn.addEventListener("click", () => {
+    searchBox.classList.remove("open");
+    manualForm.classList.add("open");
+    document.getElementById("mTitle").focus();
+  });
+  document.getElementById("mCancel").addEventListener("click", () => manualForm.classList.remove("open"));
+  const mType = document.getElementById("mType");
+  const mSeasonsField = document.getElementById("mSeasonsField");
+  mType.addEventListener("change", () => { mSeasonsField.hidden = mType.value !== "series"; });
+  manualForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const title = document.getElementById("mTitle").value.trim();
+    if(!title) return;
+    const id = "m-" + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+    const base = { title, genre: document.getElementById("mGenre").value, desc: document.getElementById("mDesc").value.trim(), poster: "", liked: null, note: "", order: Date.now() };
+    const data = mType.value === "series"
+      ? Object.assign(base, { type: "series", seasons: Math.max(1, parseInt(document.getElementById("mSeasons").value,10)||1), seasonsSeen: [] })
+      : Object.assign(base, { seen: false });
+    docs.push(Object.assign({ id }, data));
+    render(); scheduleSave();
+    manualForm.reset(); manualForm.classList.remove("open"); mSeasonsField.hidden = true;
+  });
+
+  loadRemote();
+})();
+</script>
+</body>
+</html>
