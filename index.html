@@ -101,25 +101,6 @@
 
   .manual-link{background:none;border:none;color:#24405f;text-decoration:underline;cursor:pointer;font-size:13.5px;align-self:flex-start}
 
-  .reco-box{
-    display:none;margin-top:14px;padding:16px;background:#f6efd9;border:1px solid #d8c99a;border-radius:10px;
-  }
-  .reco-box.open{display:block}
-  .reco-head{
-    font-family:"Oswald",sans-serif;font-weight:600;font-size:15px;text-transform:uppercase;
-    letter-spacing:.03em;color:#24405f;margin-bottom:4px;
-  }
-  .reco-sub{font-size:13px;color:#6d5f47;margin-bottom:12px}
-  .reco-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
-  .reco-card{
-    display:flex;flex-direction:column;gap:6px;padding:12px;border-radius:8px;
-    border:1px dashed #c9b988;background:#e8dcbb;
-  }
-  .reco-title{font-weight:700;font-size:15.5px;color:#2a2118}
-  .reco-meta{font-family:"PT Mono",monospace;font-size:11.5px;letter-spacing:.03em;color:#6d5f47;text-transform:uppercase}
-  .reco-desc{font-size:13px;color:#6d5f47;flex:1}
-  .reco-add{align-self:flex-start;font-size:12px;padding:6px 12px}
-
   .confirm-box{display:none;flex-direction:column;gap:10px;padding:14px;border:1px dashed #c9b988;border-radius:8px;background:#e8dcbb}
   .confirm-box.open{display:flex}
   .confirm-top{display:flex;gap:12px}
@@ -235,12 +216,6 @@
     .result-poster-ph{color:#6b7280}
     .result-meta,.result-overview{color:#a7a091}
     .manual-link{color:#86aed6}
-    .reco-box{background:#1b212b;border-color:#2b3341}
-    .reco-head{color:#86aed6}
-    .reco-sub{color:#a7a091}
-    .reco-card{background:#12161d;border-color:#333c48}
-    .reco-title{color:#e9e2ce}
-    .reco-meta,.reco-desc{color:#a7a091}
     .confirm-box{background:#12161d;border-color:#333c48}
     .confirm-poster{background:#2b3341}
     .field label{color:#6b7280}
@@ -297,17 +272,9 @@
       <button class="chip" data-filter="unseen" aria-pressed="false">Ще не дивились</button>
       <button class="chip" data-filter="seen" aria-pressed="false">Переглянуті</button>
       <button class="chip" data-filter="liked" aria-pressed="false">Сподобалось</button>
+      <button class="chip" data-filter="reco" aria-pressed="false">💡 Рекомендації від Клода</button>
     </div>
-    <div class="row">
-      <button class="add-btn ghost" id="toggleReco" type="button">💡 Рекомендації від Клода</button>
-      <button class="add-btn" id="toggleSearch" type="button">+ Додати фільм до справи</button>
-    </div>
-  </div>
-
-  <div class="reco-box" id="recoBox">
-    <div class="reco-head">Рекомендації від Клода</div>
-    <div class="reco-sub">Схоже на «Джентльменів» і на ваш смак — детективи, чорний гумор, харизматичні негідники. Тисни «Додати» — і воно саме знайдеться в пошуку.</div>
-    <div class="reco-list" id="recoList"></div>
+    <button class="add-btn" id="toggleSearch" type="button">+ Додати фільм до справи</button>
   </div>
 
   <div class="search-box" id="searchBox">
@@ -488,8 +455,51 @@
     }
   }
 
+  function normTitle(s){ return String(s||"").trim().toLowerCase(); }
+  function isRecoAdded(r){
+    const t1 = normTitle(r.title), t2 = normTitle(r.ua);
+    return docs.some(d => {
+      const dt = normTitle(d.title);
+      return dt === t1 || dt === t2 || dt.includes(t2) || t2.includes(dt) || dt.includes(t1) || t1.includes(dt);
+    });
+  }
+
+  function recoCardHtml(r){
+    const idx = RECOMMENDATIONS.indexOf(r);
+    return `
+      <article class="card">
+        <div class="card-top"><span class="case-no">РЕКОМЕНДАЦІЯ</span></div>
+        <div class="card-body">
+          <div class="title">${escapeHtml(r.ua)}</div>
+          <span class="genre">${r.type === "tv" ? "серіал" : "фільм"} · ${escapeHtml(r.title)}</span>
+          <div class="desc">${escapeHtml(r.desc)}</div>
+        </div>
+        <div class="rule"></div>
+        <button type="button" class="add-btn" data-action="add-reco" data-idx="${idx}">+ Додати до справи</button>
+      </article>`;
+  }
+
+  function renderRecoGrid(){
+    const available = RECOMMENDATIONS.filter(r => !isRecoAdded(r));
+    if(available.length === 0){
+      grid.innerHTML = '<div class="empty">Усі рекомендації вже у твоїй справі 🎬</div>';
+      return;
+    }
+    grid.innerHTML = available.map(r => recoCardHtml(r)).join("");
+    grid.querySelectorAll('[data-action="add-reco"]').forEach(btn => {
+      btn.addEventListener("click", () => {
+        const r = RECOMMENDATIONS[parseInt(btn.dataset.idx, 10)];
+        searchBox.classList.add("open");
+        searchInput.value = r.title;
+        runSearch();
+        searchBox.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+  }
+
   function render(){
     fmtStats();
+    if(activeFilter === "reco"){ renderRecoGrid(); return; }
     const list = applyFilter(docs).slice().sort((a,b) => (a.order||0) - (b.order||0));
     if(list.length === 0){
       grid.innerHTML = '<div class="empty">У цій категорії поки порожньо.</div>';
@@ -804,33 +814,6 @@
     docs.push(Object.assign({ id }, data));
     render(); scheduleSave();
     manualForm.reset(); manualForm.classList.remove("open"); mSeasonsField.hidden = true;
-  });
-
-  // ---- recommendations from Claude ----
-  function renderReco(){
-    const list = document.getElementById("recoList");
-    if(!list) return;
-    list.innerHTML = RECOMMENDATIONS.map((r, i) => `
-      <div class="reco-card">
-        <div class="reco-title">${escapeHtml(r.ua)}</div>
-        <div class="reco-meta">${r.type === "tv" ? "серіал" : "фільм"} · ${escapeHtml(r.title)}</div>
-        <div class="reco-desc">${escapeHtml(r.desc)}</div>
-        <button type="button" class="add-btn ghost reco-add" data-idx="${i}">+ Додати</button>
-      </div>`).join("");
-    list.querySelectorAll(".reco-add").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const r = RECOMMENDATIONS[parseInt(btn.dataset.idx, 10)];
-        searchBox.classList.add("open");
-        searchInput.value = r.title;
-        runSearch();
-        searchBox.scrollIntoView({ behavior: "smooth", block: "start" });
-      });
-    });
-  }
-  renderReco();
-
-  document.getElementById("toggleReco").addEventListener("click", () => {
-    document.getElementById("recoBox").classList.toggle("open");
   });
 
   loadRemote();
