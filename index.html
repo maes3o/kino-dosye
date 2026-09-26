@@ -102,8 +102,9 @@
   .manual-link{background:none;border:none;color:#24405f;text-decoration:underline;cursor:pointer;font-size:13.5px;align-self:flex-start}
 
   .reco-box{
-    margin-top:22px;padding:16px;background:#f6efd9;border:1px solid #d8c99a;border-radius:10px;
+    display:none;margin-top:14px;padding:16px;background:#f6efd9;border:1px solid #d8c99a;border-radius:10px;
   }
+  .reco-box.open{display:block}
   .reco-head{
     font-family:"Oswald",sans-serif;font-weight:600;font-size:15px;text-transform:uppercase;
     letter-spacing:.03em;color:#24405f;margin-bottom:4px;
@@ -290,12 +291,6 @@
     <div class="stats" id="stats"></div>
   </header>
 
-  <div class="reco-box" id="recoBox">
-    <div class="reco-head">Рекомендації від Клода</div>
-    <div class="reco-sub">Схоже на «Джентльменів» і на ваш смак — детективи, чорний гумор, харизматичні негідники. Тисни «Додати» — і воно саме знайдеться в пошуку.</div>
-    <div class="reco-list" id="recoList"></div>
-  </div>
-
   <div class="toolbar">
     <div class="filters" id="filters" role="group" aria-label="Фільтр за статусом">
       <button class="chip" data-filter="all" aria-pressed="true">Усі</button>
@@ -303,7 +298,16 @@
       <button class="chip" data-filter="seen" aria-pressed="false">Переглянуті</button>
       <button class="chip" data-filter="liked" aria-pressed="false">Сподобалось</button>
     </div>
-    <button class="add-btn" id="toggleSearch" type="button">+ Додати фільм до справи</button>
+    <div class="row">
+      <button class="add-btn ghost" id="toggleReco" type="button">💡 Рекомендації від Клода</button>
+      <button class="add-btn" id="toggleSearch" type="button">+ Додати фільм до справи</button>
+    </div>
+  </div>
+
+  <div class="reco-box" id="recoBox">
+    <div class="reco-head">Рекомендації від Клода</div>
+    <div class="reco-sub">Схоже на «Джентльменів» і на ваш смак — детективи, чорний гумор, харизматичні негідники. Тисни «Додати» — і воно саме знайдеться в пошуку.</div>
+    <div class="reco-list" id="recoList"></div>
   </div>
 
   <div class="search-box" id="searchBox">
@@ -824,6 +828,10 @@
     });
   }
   renderReco();
+
+  document.getElementById("toggleReco").addEventListener("click", () => {
+    document.getElementById("recoBox").classList.toggle("open");
+  });
 
   loadRemote();
 })();
