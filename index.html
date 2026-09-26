@@ -14,7 +14,8 @@
     background:#e8dcbb;
     color:#2a2118;
     font-family:"PT Sans","Golos Text",system-ui,sans-serif;
-    line-height:1.45;
+    font-size:17px;
+    line-height:1.5;
     -webkit-font-smoothing:antialiased;
   }
   img{max-width:100%}
@@ -35,25 +36,25 @@
     padding:22px 26px 24px;
   }
   h1{
-    font-family:"Oswald",sans-serif;font-weight:700;font-size:clamp(28px,4vw,40px);
+    font-family:"Oswald",sans-serif;font-weight:700;font-size:clamp(30px,4.4vw,44px);
     letter-spacing:.01em;text-transform:uppercase;margin:4px 0 6px;text-wrap:balance;color:#2a2118;
   }
-  .subtitle{color:#6d5f47;font-size:15px;max-width:64ch}
+  .subtitle{color:#6d5f47;font-size:16.5px;max-width:64ch}
   .setup-note{
     margin-top:14px;padding:12px 14px;border-radius:8px;
-    background:#f1ded9;border:1px solid #8c2f27;color:#5a1e18;font-size:13px;
+    background:#f1ded9;border:1px solid #8c2f27;color:#5a1e18;font-size:14px;
   }
   .setup-note code{background:#fff8;padding:1px 5px;border-radius:4px}
 
   .stats{display:flex;gap:22px;margin-top:18px;padding-top:14px;border-top:1px dashed #c9b988;font-family:"PT Mono",monospace;flex-wrap:wrap}
   .stat{display:flex;flex-direction:column;gap:2px}
-  .stat b{font-size:20px;color:#2a2118;font-weight:700;font-variant-numeric:tabular-nums}
-  .stat span{font-size:11px;letter-spacing:.07em;text-transform:uppercase;color:#a4936d}
+  .stat b{font-size:23px;color:#2a2118;font-weight:700;font-variant-numeric:tabular-nums}
+  .stat span{font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:#a4936d}
 
   .toolbar{margin-top:22px;display:flex;justify-content:space-between;align-items:center;gap:14px;flex-wrap:wrap}
   .filters{display:flex;gap:8px;flex-wrap:wrap}
   .chip{
-    font-family:"PT Mono",monospace;font-size:12px;letter-spacing:.03em;padding:7px 13px;
+    font-family:"PT Mono",monospace;font-size:13px;letter-spacing:.03em;padding:7px 13px;
     border-radius:999px;border:1px solid #c9b988;background:transparent;color:#6d5f47;cursor:pointer;
     transition:background .15s,color .15s,border-color .15s;
   }
@@ -63,7 +64,7 @@
     outline:2px solid #1b6ea8;outline-offset:2px
   }
   .add-btn{
-    font-family:"PT Mono",monospace;font-size:12px;letter-spacing:.04em;padding:9px 16px;border-radius:8px;
+    font-family:"PT Mono",monospace;font-size:13px;letter-spacing:.04em;padding:9px 16px;border-radius:8px;
     border:1px solid #24405f;background:#24405f;color:#f6efd9;cursor:pointer;white-space:nowrap;
   }
   .add-btn:hover{filter:brightness(1.08)}
@@ -77,10 +78,10 @@
   .search-box.open{display:flex}
   .search-row{display:flex;gap:10px;flex-wrap:wrap}
   .search-row input[type="text"]{
-    flex:1;min-width:220px;font-family:"PT Sans",sans-serif;font-size:14px;padding:9px 12px;
+    flex:1;min-width:220px;font-family:"PT Sans",sans-serif;font-size:15px;padding:9px 12px;
     border-radius:6px;border:1px solid #c9b988;background:#e8dcbb;color:#2a2118;
   }
-  .search-hint{font-size:12px;color:#a4936d;font-family:"PT Mono",monospace}
+  .search-hint{font-size:13px;color:#a4936d;font-family:"PT Mono",monospace}
   .search-results{display:flex;flex-direction:column;gap:8px;max-height:420px;overflow-y:auto}
   .result-card{
     display:flex;gap:12px;padding:10px;border-radius:8px;border:1px solid #d8c99a;background:#e8dcbb;
@@ -93,11 +94,29 @@
     justify-content:center;font-family:"PT Mono",monospace;font-size:9px;color:#a4936d;text-align:center;padding:2px;
   }
   .result-body{display:flex;flex-direction:column;gap:3px;min-width:0}
-  .result-title{font-weight:700;font-size:14px}
-  .result-meta{font-family:"PT Mono",monospace;font-size:11px;color:#6d5f47}
-  .result-overview{font-size:12px;color:#6d5f47;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  .result-title{font-weight:700;font-size:15px}
+  .result-meta{font-family:"PT Mono",monospace;font-size:12px;color:#6d5f47}
+  .result-overview{font-size:13px;color:#6d5f47;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
 
-  .manual-link{background:none;border:none;color:#24405f;text-decoration:underline;cursor:pointer;font-size:12.5px;align-self:flex-start}
+  .manual-link{background:none;border:none;color:#24405f;text-decoration:underline;cursor:pointer;font-size:13.5px;align-self:flex-start}
+
+  .reco-box{
+    margin-top:22px;padding:16px;background:#f6efd9;border:1px solid #d8c99a;border-radius:10px;
+  }
+  .reco-head{
+    font-family:"Oswald",sans-serif;font-weight:600;font-size:15px;text-transform:uppercase;
+    letter-spacing:.03em;color:#24405f;margin-bottom:4px;
+  }
+  .reco-sub{font-size:13px;color:#6d5f47;margin-bottom:12px}
+  .reco-list{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+  .reco-card{
+    display:flex;flex-direction:column;gap:6px;padding:12px;border-radius:8px;
+    border:1px dashed #c9b988;background:#e8dcbb;
+  }
+  .reco-title{font-weight:700;font-size:15.5px;color:#2a2118}
+  .reco-meta{font-family:"PT Mono",monospace;font-size:11.5px;letter-spacing:.03em;color:#6d5f47;text-transform:uppercase}
+  .reco-desc{font-size:13px;color:#6d5f47;flex:1}
+  .reco-add{align-self:flex-start;font-size:12px;padding:6px 12px}
 
   .confirm-box{display:none;flex-direction:column;gap:10px;padding:14px;border:1px dashed #c9b988;border-radius:8px;background:#e8dcbb}
   .confirm-box.open{display:flex}
@@ -105,9 +124,9 @@
   .confirm-poster{width:70px;height:100px;object-fit:cover;border-radius:6px;flex:none;background:#d8c99a}
   .confirm-fields{display:flex;flex-direction:column;gap:8px;flex:1;min-width:0}
   .field{display:flex;flex-direction:column;gap:5px}
-  .field label{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:#a4936d;font-family:"PT Mono",monospace}
+  .field label{font-size:11.5px;letter-spacing:.06em;text-transform:uppercase;color:#a4936d;font-family:"PT Mono",monospace}
   .field input[type="text"],.field input[type="number"],.field select,.field textarea{
-    font-family:"PT Sans",sans-serif;font-size:14px;padding:8px 10px;border-radius:6px;
+    font-family:"PT Sans",sans-serif;font-size:15px;padding:8px 10px;border-radius:6px;
     border:1px solid #c9b988;background:#f6efd9;color:#2a2118;
   }
   .field textarea{resize:vertical;min-height:44px;font-family:inherit}
@@ -136,52 +155,61 @@
     font-size:10px;text-align:center;padding:4px;
   }
   .card-body{flex:1;display:flex;flex-direction:column;gap:6px;min-width:0}
-  .title{font-family:"PT Sans",sans-serif;font-weight:700;font-size:18px;color:#2a2118;text-wrap:balance}
+  .title{font-family:"PT Sans",sans-serif;font-weight:700;font-size:19.5px;color:#2a2118;text-wrap:balance}
   .genre{
-    align-self:flex-start;font-family:"PT Mono",monospace;font-size:10.5px;letter-spacing:.06em;
+    align-self:flex-start;font-family:"PT Mono",monospace;font-size:11.5px;letter-spacing:.06em;
     text-transform:uppercase;color:#6d5f47;border:1px solid #c9b988;border-radius:999px;padding:3px 9px;
   }
-  .desc{font-size:12.5px;color:#6d5f47;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-  .note{font-size:12.5px;color:#8c2f27;font-style:italic}
+  .desc{font-size:13.5px;color:#6d5f47;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+  .note{font-size:13.5px;color:#8c2f27;font-style:italic}
   .rule{border-top:1px dashed #c9b988;margin:2px 0}
   .row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
   .seen-btn{
-    font-family:"PT Mono",monospace;font-size:12px;letter-spacing:.03em;padding:7px 12px;border-radius:7px;
+    font-family:"PT Mono",monospace;font-size:13px;letter-spacing:.03em;padding:7px 12px;border-radius:7px;
     border:1px solid #c9b988;background:transparent;color:#6d5f47;cursor:pointer;display:inline-flex;
     align-items:center;gap:6px;
   }
   .seen-btn[aria-pressed="true"]{background:#dde9de;border-color:#35603f;color:#35603f}
   .season-row{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
-  .season-label{font-family:"PT Mono",monospace;font-size:11px;color:#a4936d;letter-spacing:.04em;margin-right:2px}
+  .season-label{font-family:"PT Mono",monospace;font-size:12px;color:#a4936d;letter-spacing:.04em;margin-right:2px}
   .season-chip{
-    font-family:"PT Mono",monospace;font-size:11.5px;padding:5px 9px;border-radius:6px;
+    font-family:"PT Mono",monospace;font-size:12.5px;padding:5px 9px;border-radius:6px;
     border:1px solid #c9b988;background:transparent;color:#6d5f47;cursor:pointer;
   }
   .season-chip[aria-pressed="true"]{background:#dde9de;border-color:#35603f;color:#35603f}
   .season-adj{
-    font-family:"PT Mono",monospace;font-size:13px;width:26px;height:26px;line-height:1;border-radius:6px;
+    font-family:"PT Mono",monospace;font-size:14px;width:27px;height:27px;line-height:1;border-radius:6px;
     border:1px dashed #c9b988;background:transparent;color:#a4936d;cursor:pointer;
   }
   .season-adj:hover{border-color:#24405f;color:#24405f}
   .stamp{
     position:absolute;top:14px;right:-34px;transform:rotate(11deg);font-family:"Oswald",sans-serif;
-    font-weight:700;font-size:12.5px;letter-spacing:.12em;text-transform:uppercase;color:#8c2f27;
+    font-weight:700;font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:#8c2f27;
     border:2.5px solid #8c2f27;border-radius:6px;padding:3px 30px;opacity:.8;mix-blend-mode:multiply;pointer-events:none;
   }
   .stamp.stamp-partial{color:#24405f;border-color:#24405f}
   .verdict{display:flex;gap:6px}
   .verdict-btn{
     flex:1;display:inline-flex;align-items:center;justify-content:center;gap:6px;font-family:"PT Sans",sans-serif;
-    font-size:12.5px;padding:7px 8px;border-radius:7px;border:1px solid #c9b988;background:transparent;color:#6d5f47;cursor:pointer;
+    font-size:13.5px;padding:7px 8px;border-radius:7px;border:1px solid #c9b988;background:transparent;color:#6d5f47;cursor:pointer;
   }
   .verdict-btn svg{width:13px;height:13px;flex:none}
   .verdict-btn.like[aria-pressed="true"]{background:#dde9de;border-color:#35603f;color:#35603f}
   .verdict-btn.dislike[aria-pressed="true"]{background:#f1ded9;border-color:#8c2f27;color:#8c2f27}
   .verdict-btn:disabled{opacity:.45;cursor:not-allowed}
-  .verdict-hint{font-size:11.5px;color:#a4936d;font-style:italic}
-  .empty{grid-column:1/-1;text-align:center;padding:50px 20px;color:#6d5f47;font-family:"PT Mono",monospace;font-size:13px}
-  footer.note-foot{margin-top:26px;color:#a4936d;font-size:12px;text-align:center}
-  .spinner{font-family:"PT Mono",monospace;font-size:12px;color:#6d5f47}
+  .verdict-hint{font-size:12.5px;color:#a4936d;font-style:italic}
+  .stars{display:flex;gap:4px;align-items:center}
+  .star-btn{
+    background:none;border:none;cursor:pointer;font-size:22px;line-height:1;color:#c9b988;padding:0;
+    transition:color .15s,transform .1s;
+  }
+  .star-btn.filled{color:#c98a2b}
+  .star-btn:hover:not(:disabled){transform:scale(1.15)}
+  .star-btn:disabled{cursor:not-allowed;opacity:.5}
+  .stars-label{font-family:"PT Mono",monospace;font-size:11.5px;color:#a4936d;letter-spacing:.04em;margin-right:4px}
+  .empty{grid-column:1/-1;text-align:center;padding:50px 20px;color:#6d5f47;font-family:"PT Mono",monospace;font-size:14px}
+  footer.note-foot{margin-top:26px;color:#a4936d;font-size:13px;text-align:center}
+  .spinner{font-family:"PT Mono",monospace;font-size:13px;color:#6d5f47}
 
   @media (prefers-color-scheme: dark){
     body{background:#12161d;color:#e9e2ce}
@@ -205,6 +233,12 @@
     .result-poster-ph{color:#6b7280}
     .result-meta,.result-overview{color:#a7a091}
     .manual-link{color:#86aed6}
+    .reco-box{background:#1b212b;border-color:#2b3341}
+    .reco-head{color:#86aed6}
+    .reco-sub{color:#a7a091}
+    .reco-card{background:#12161d;border-color:#333c48}
+    .reco-title{color:#e9e2ce}
+    .reco-meta,.reco-desc{color:#a7a091}
     .confirm-box{background:#12161d;border-color:#333c48}
     .confirm-poster{background:#2b3341}
     .field label{color:#6b7280}
@@ -233,6 +267,9 @@
     .verdict-btn.like[aria-pressed="true"]{background:#223227;border-color:#8fcb9a;color:#8fcb9a}
     .verdict-btn.dislike[aria-pressed="true"]{background:#3a2323;border-color:#e08d84;color:#e08d84}
     .verdict-hint,.empty,footer.note-foot,.spinner{color:#a7a091}
+    .star-btn{color:#333c48}
+    .star-btn.filled{color:#e0a83a}
+    .stars-label{color:#6b7280}
     .setup-note{background:#3a2323;border-color:#e08d84;color:#f1ded9}
   }
 </style>
@@ -322,6 +359,12 @@
     </div>
   </form>
 
+  <div class="reco-box" id="recoBox">
+    <div class="reco-head">Рекомендації від Клода</div>
+    <div class="reco-sub">Схоже на «Джентльменів» і на ваш смак — детективи, чорний гумор, харизматичні негідники. Тисни «Додати» — і воно саме знайдеться в пошуку.</div>
+    <div class="reco-list" id="recoList"></div>
+  </div>
+
   <div class="grid" id="grid"><div class="empty spinner">Завантаження справи…</div></div>
 
   <footer class="note-foot">Дані зберігаються спільно — правки одного одразу видно другому. Постери й описи підтягуються з TMDB автоматично.</footer>
@@ -400,6 +443,17 @@
       desc: "Мати-домогосподарка, яка обожнює детективи, розслідує вбивство жінки й дізнається найпотаємніші секрети жителів маленького містечка." }
   ];
 
+  const RECOMMENDATIONS = [
+    { title:"Peaky Blinders", ua:"Гострі картузи", type:"tv", desc:"Британський гангстерський серіал про родину Шелбі в Бірмінгемі 1920-х — стиль, музика і фірмовий чорний гумор." },
+    { title:"Slow Horses", ua:"Повільні коні", type:"tv", desc:"Розвідники-невдахи з відділу «на списання» MI5 розплутують справжні змови. Їдкий гумор і справжня напруга." },
+    { title:"Only Murders in the Building", ua:"Тільки вбивства у цій будівлі", type:"tv", desc:"Троє сусідів-детективів-аматорів ведуть подкаст про вбивство у власному будинку. Легко й дуже смішно." },
+    { title:"The Outlaws", ua:"Поза законом", type:"tv", desc:"Різношерста компанія на громадських роботах випадково натрапляє на серйозну кримінальну справу." },
+    { title:"Knives Out", ua:"Ножі наголо", type:"movie", desc:"Детектив Бенуа Бланк розплутує загадкову смерть письменника в маєтку його ж родини. Перша частина франшизи." },
+    { title:"The Nice Guys", ua:"Хороші хлопці", type:"movie", desc:"Приватний детектив і найманий громил розслідують зникнення дівчини в Лос-Анджелесі 70-х. Смішно й стильно." },
+    { title:"Fargo", ua:"Фарго", type:"tv", desc:"Чорна кримінальна комедія в засніжених преріях Міннесоти — щосезону нова історія й новий акторський склад." },
+    { title:"Snatch", ua:"Великий куш", type:"movie", desc:"Ще один шедевр Гая Річі — бокс, вкрадені діаманти і купа кримінальних ліній, що переплітаються." }
+  ];
+
   let docs = [];
   let activeFilter = "all";
   let saveTimer = null;
@@ -471,6 +525,14 @@
       watchControl = `<div class="row"><button class="seen-btn" data-action="seen" aria-pressed="${fully}">${fully ? ICON_CHECK : ''} ${fully ? 'Переглянуто' : 'Позначити переглянутим'}</button></div>`;
     }
 
+    const rating = d.rating || 0;
+    let starsHtml = '<div class="stars" role="group" aria-label="Оцінка зірками">';
+    starsHtml += '<span class="stars-label">Оцінка:</span>';
+    for(let s = 1; s <= 5; s++){
+      starsHtml += `<button type="button" class="star-btn ${s <= rating ? 'filled' : ''}" data-action="rate" data-value="${s}" ${verdictDisabled ? 'disabled' : ''} title="${s} з 5">★</button>`;
+    }
+    starsHtml += '</div>';
+
     const posterBlock = d.poster
       ? `<img class="poster" src="${d.poster}" alt="" loading="lazy">`
       : `<div class="poster-placeholder">без фото</div>`;
@@ -498,6 +560,7 @@
           <button class="verdict-btn like" data-action="like" aria-pressed="${likePressed}" ${verdictDisabled ? 'disabled' : ''}>${ICON_CHECK} Сподобалось</button>
           <button class="verdict-btn dislike" data-action="dislike" aria-pressed="${dislikePressed}" ${verdictDisabled ? 'disabled' : ''}>${ICON_X} Не зайшло</button>
         </div>
+        ${starsHtml}
         ${verdictDisabled ? '<div class="verdict-hint">Спершу подивіться — потім оцініть.</div>' : ''}
       </article>`;
   }
@@ -546,6 +609,13 @@
       docs = docs.filter(x => x.id !== d.id);
       render();
       scheduleSave();
+    });
+    card.querySelectorAll('[data-action="rate"]').forEach(btn => {
+      btn.addEventListener("click", () => {
+        if(!isAnySeen(d)) return;
+        const v = parseInt(btn.dataset.value, 10);
+        patchDoc(d.id, { rating: d.rating === v ? 0 : v });
+      });
     });
   }
 
@@ -743,6 +813,29 @@
     render(); scheduleSave();
     manualForm.reset(); manualForm.classList.remove("open"); mSeasonsField.hidden = true;
   });
+
+  // ---- recommendations from Claude ----
+  function renderReco(){
+    const list = document.getElementById("recoList");
+    if(!list) return;
+    list.innerHTML = RECOMMENDATIONS.map((r, i) => `
+      <div class="reco-card">
+        <div class="reco-title">${escapeHtml(r.ua)}</div>
+        <div class="reco-meta">${r.type === "tv" ? "серіал" : "фільм"} · ${escapeHtml(r.title)}</div>
+        <div class="reco-desc">${escapeHtml(r.desc)}</div>
+        <button type="button" class="add-btn ghost reco-add" data-idx="${i}">+ Додати</button>
+      </div>`).join("");
+    list.querySelectorAll(".reco-add").forEach(btn => {
+      btn.addEventListener("click", () => {
+        const r = RECOMMENDATIONS[parseInt(btn.dataset.idx, 10)];
+        searchBox.classList.add("open");
+        searchInput.value = r.title;
+        runSearch();
+        searchBox.scrollIntoView({ behavior: "smooth", block: "start" });
+      });
+    });
+  }
+  renderReco();
 
   loadRemote();
 })();
