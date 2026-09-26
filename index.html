@@ -456,6 +456,14 @@
   }
 
   function normTitle(s){ return String(s||"").trim().toLowerCase(); }
+  function findDuplicate(title){
+    const t = normTitle(title);
+    if(!t) return null;
+    return docs.find(d => {
+      const dt = normTitle(d.title);
+      return dt === t || dt.includes(t) || t.includes(dt);
+    }) || null;
+  }
   function isRecoAdded(r){
     const t1 = normTitle(r.title), t2 = normTitle(r.ua);
     return docs.some(d => {
@@ -772,6 +780,8 @@
   });
   document.getElementById("confirmSave").addEventListener("click", () => {
     if(!pendingResult) return;
+    const dup = findDuplicate(confirmTitle.value);
+    if(dup && !confirm(`Схоже, «${dup.title}» вже є у справі. Додати ще раз?`)) return;
     const isTv = pendingResult.media_type === "tv";
     const id = "m-" + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
     const base = {
@@ -806,6 +816,8 @@
     e.preventDefault();
     const title = document.getElementById("mTitle").value.trim();
     if(!title) return;
+    const dup = findDuplicate(title);
+    if(dup && !confirm(`Схоже, «${dup.title}» вже є у справі. Додати ще раз?`)) return;
     const id = "m-" + Date.now().toString(36) + Math.random().toString(36).slice(2,6);
     const base = { title, genre: document.getElementById("mGenre").value, desc: document.getElementById("mDesc").value.trim(), poster: "", liked: null, note: "", order: Date.now() };
     const data = mType.value === "series"
