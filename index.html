@@ -670,15 +670,29 @@
   const confirmSeasons = document.getElementById("confirmSeasons");
   let pendingResult = null;
 
-  function openConfirm(r){
+  async function openConfirm(r){
     pendingResult = r;
     confirmPoster.src = r.poster_path ? `${TMDB_IMG}${r.poster_path}` : "";
     confirmTitle.value = r.title || r.name || "";
     confirmDesc.value = r.overview || "";
     const isTv = r.media_type === "tv";
     confirmSeasonsField.hidden = !isTv;
-    if(isTv) confirmSeasons.value = 1;
-    confirmBox.classList.add("open");
+    if(isTv){
+      confirmSeasons.value = 1;
+      confirmSeasons.disabled = true;
+      confirmBox.classList.add("open");
+      try{
+        const url = `https://api.themoviedb.org/3/tv/${r.id}?api_key=${TMDB_KEY}&language=uk-UA`;
+        const res = await fetch(url);
+        const info = await res.json();
+        if(pendingResult === r && info && info.number_of_seasons){
+          confirmSeasons.value = info.number_of_seasons;
+        }
+      }catch(e){ /* тихо лишаємо 1, юзер може виправити вручну */ }
+      confirmSeasons.disabled = false;
+    }else{
+      confirmBox.classList.add("open");
+    }
   }
   document.getElementById("confirmCancel").addEventListener("click", () => {
     confirmBox.classList.remove("open");
